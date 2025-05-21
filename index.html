@@ -80,7 +80,7 @@
       document.getElementById("history").innerHTML = historyHtml;
     }
 
-function sendDataToCollector(user, match) {
+    function sendDataToCollector(user, match) {
   const formData = new FormData();
   formData.append("entry.374051999", user);               // Username
   formData.append("entry.2112547923", match.player);       // Player Move
@@ -93,6 +93,7 @@ function sendDataToCollector(user, match) {
     body: formData,
   });
 }
+
 
   </script>
 </body>
