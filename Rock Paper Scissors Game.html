@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Rock Paper Scissors</title>
+  <style>
+    body { font-family: Arial; text-align: center; padding-top: 50px; }
+    .hidden { display: none; }
+    button { margin: 10px; padding: 10px 20px; font-size: 16px; }
+    #results { margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>Rock Paper Scissors</h1>
+  <div id="usernamePrompt">
+    <p>Enter your name:</p>
+    <input type="text" id="usernameInput">
+    <button onclick="startGame()">Start</button>
+  </div>
+
+  <div id="gameArea" class="hidden">
+    <h2 id="greeting"></h2>
+    <p>Choose your move:</p>
+    <button onclick="play('Rock')">Rock</button>
+    <button onclick="play('Paper')">Paper</button>
+    <button onclick="play('Scissors')">Scissors</button>
+
+    <div id="results"></div>
+    <div id="history"></div>
+  </div>
+
+  <iframe id="dataFrame" name="dataFrame" src="data_collector.html" class="hidden"></iframe>
+
+  <script>
+    let username = "";
+    let matchHistory = [];
+    const choices = ["Rock", "Paper", "Scissors"];
+
+    function startGame() {
+      username = document.getElementById("usernameInput").value.trim();
+      if (!username) return alert("Please enter your name.");
+      document.getElementById("usernamePrompt").classList.add("hidden");
+      document.getElementById("gameArea").classList.remove("hidden");
+      document.getElementById("greeting").textContent = `Welcome, ${username}!`;
+    }
+
+    function getBotMove() {
+      if (matchHistory.length === 0) return choices[Math.floor(Math.random() * 3)];
+      const lastPlayerMove = matchHistory[matchHistory.length - 1].player;
+      if (lastPlayerMove === "Rock") return "Paper";
+      if (lastPlayerMove === "Paper") return "Scissors";
+      return "Rock";
+    }
+
+    function determineWinner(player, bot) {
+      if (player === bot) return "Draw";
+      if ((player === "Rock" && bot === "Scissors") ||
+          (player === "Paper" && bot === "Rock") ||
+          (player === "Scissors" && bot === "Paper")) return "Win";
+      return "Lose";
+    }
+
+    function play(playerMove) {
+      const botMove = getBotMove();
+      const result = determineWinner(playerMove, botMove);
+      const match = { player: playerMove, bot: botMove, result };
+      matchHistory.push(match);
+
+      document.getElementById("results").innerHTML = `
+        <p>You chose: <strong>${playerMove}</strong></p>
+        <p>Bot chose: <strong>${botMove}</strong></p>
+        <p>Result: <strong>${result}</strong></p>
+      `;
+
+      updateHistory();
+      sendDataToCollector(username, match);
+    }
+
+    function updateHistory() {
+      let historyHtml = '<h3>Match History</h3><ul>';
+      matchHistory.forEach((match, index) => {
+        historyHtml += `<li>Game ${index + 1}: You chose ${match.player}, Bot chose ${match.bot} → ${match.result}</li>`;
+      });
+      historyHtml += '</ul>';
+      document.getElementById("history").innerHTML = historyHtml;
+    }
+
+    function sendDataToCollector(user, match) {
+      const dataDoc = document.getElementById("dataFrame").contentWindow;
+      dataDoc.postMessage({ user, match }, "*");
+    }
+
+    window.addEventListener("message", (event) => {
+      if (event.data === "ACK") {
+        console.log("Data acknowledged by collector.");
+      }
+    });
+  </script>
+</body>
+</html>
