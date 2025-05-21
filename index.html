@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Rock Paper Scissors</title>
   <style>
     body { font-family: Arial; text-align: center; padding-top: 50px; }
@@ -12,9 +12,10 @@
 </head>
 <body>
   <h1>Rock Paper Scissors</h1>
+
   <div id="usernamePrompt">
     <p>Enter your name:</p>
-    <input type="text" id="usernameInput">
+    <input type="text" id="usernameInput" />
     <button onclick="startGame()">Start</button>
   </div>
 
@@ -29,27 +30,22 @@
     <div id="history"></div>
   </div>
 
-  <iframe id="dataFrame" name="dataFrame" src="data_collector.html" class="hidden"></iframe>
-
   <script>
     let username = "";
     let matchHistory = [];
     const choices = ["Rock", "Paper", "Scissors"];
 
-function startGame() {
-  username = document.getElementById("usernameInput").value.trim();
-  if (!username) return alert("Please enter your name.");
-  document.getElementById("usernamePrompt").classList.add("hidden");
-  document.getElementById("gameArea").classList.remove("hidden");
-  document.getElementById("greeting").textContent = `Welcome, ${username}!`;
-}
-
+    function startGame() {
+      username = document.getElementById("usernameInput").value.trim();
+      if (!username) return alert("Please enter your name.");
+      document.getElementById("usernamePrompt").classList.add("hidden");
+      document.getElementById("gameArea").classList.remove("hidden");
+      document.getElementById("greeting").textContent = `Welcome, ${username}!`;
     }
 
-function getBotMove() {
-  return choices[Math.floor(Math.random() * 3)];
-}
-
+    function getBotMove() {
+      return choices[Math.floor(Math.random() * 3)];
+    }
 
     function determineWinner(player, bot) {
       if (player === bot) return "Draw";
@@ -84,26 +80,19 @@ function getBotMove() {
       document.getElementById("history").innerHTML = historyHtml;
     }
 
-function sendDataToCollector(user, match) {
-  fetch("https://script.google.com/macros/s/AKfycbwZsethGGrhAZ1WncC2eypQO6VbNp8TRKyXxp5JE8jSbvXb4X_rAe-0VsX17AfkrMLoxA/exec", {
-    method: "POST",
-    body: JSON.stringify({ user, match }),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
-  .then(res => res.text())
-  .then(console.log)
-  .catch(console.error);
-}
-
+    function sendDataToCollector(user, match) {
+      fetch("https://script.google.com/macros/s/AKfycbwZsethGGrhAZ1WncC2eypQO6VbNp8TRKyXxp5JE8jSbvXb4X_rAe-0VsX17AfkrMLoxA/exec", {
+        method: "POST",
+        body: JSON.stringify({ user, match }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then(res => res.text())
+      .then(console.log)
+      .catch(console.error);
     }
-
-    window.addEventListener("message", (event) => {
-      if (event.data === "ACK") {
-        console.log("Data acknowledged by collector.");
-      }
-    });
   </script>
 </body>
 </html>
+
