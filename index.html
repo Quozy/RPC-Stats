@@ -36,21 +36,20 @@
     let matchHistory = [];
     const choices = ["Rock", "Paper", "Scissors"];
 
-    function startGame() {
-      username = document.getElementById("usernameInput").value.trim();
-      if (!username) return alert("Please enter your name.");
-      document.getElementById("usernamePrompt").classList.add("hidden");
-      document.getElementById("gameArea").classList.remove("hidden");
-      document.getElementById("greeting").textContent = `Welcome, ${username}!`;
+function startGame() {
+  username = document.getElementById("usernameInput").value.trim();
+  if (!username) return alert("Please enter your name.");
+  document.getElementById("usernamePrompt").classList.add("hidden");
+  document.getElementById("gameArea").classList.remove("hidden");
+  document.getElementById("greeting").textContent = `Welcome, ${username}!`;
+}
+
     }
 
-    function getBotMove() {
-      if (matchHistory.length === 0) return choices[Math.floor(Math.random() * 3)];
-      const lastPlayerMove = matchHistory[matchHistory.length - 1].player;
-      if (lastPlayerMove === "Rock") return "Paper";
-      if (lastPlayerMove === "Paper") return "Scissors";
-      return "Rock";
-    }
+function getBotMove() {
+  return choices[Math.floor(Math.random() * 3)];
+}
+
 
     function determineWinner(player, bot) {
       if (player === bot) return "Draw";
