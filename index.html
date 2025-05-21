@@ -80,18 +80,20 @@
       document.getElementById("history").innerHTML = historyHtml;
     }
 
-    function sendDataToCollector(user, match) {
-      fetch("https://script.google.com/macros/s/AKfycbwZsethGGrhAZ1WncC2eypQO6VbNp8TRKyXxp5JE8jSbvXb4X_rAe-0VsX17AfkrMLoxA/exec", {
-        method: "POST",
-        body: JSON.stringify({ user, match }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then(res => res.text())
-      .then(console.log)
-      .catch(console.error);
-    }
+function sendDataToCollector(user, match) {
+  const formData = new FormData();
+  formData.append("entry.374051999", user);               // Username
+  formData.append("entry.2112547923", match.player);       // Player Move
+  formData.append("entry.239278610", match.bot);           // Bot Move
+  formData.append("entry.2075809384", match.result);       // Result
+
+  fetch("https://docs.google.com/forms/d/e/1FAIpQLSdnSrKw9AO5Izyd7IB00i1lUEXBxgIyfXa1BaeOb1qM2H4z8w/formResponse", {
+    method: "POST",
+    mode: "no-cors",
+    body: formData,
+  });
+}
+
   </script>
 </body>
 </html>
