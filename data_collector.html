@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Data Collector</title>
+  <style>
+    body { font-family: Arial; background: #f0f0f0; padding: 20px; }
+    h2 { margin-top: 0; }
+    pre { background: white; padding: 10px; border: 1px solid #ccc; max-height: 500px; overflow-y: auto; }
+  </style>
+</head>
+<body>
+  <h2>Match Data Log</h2>
+  <pre id="log"></pre>
+
+  <script>
+    const logElement = document.getElementById("log");
+    const allData = [];
+
+    window.addEventListener("message", (event) => {
+      if (event.data && event.data.user && event.data.match) {
+        allData.push(event.data);
+        const line = `User: ${event.data.user} | Player: ${event.data.match.player}, Bot: ${event.data.match.bot}, Result: ${event.data.match.result}`;
+        logElement.textContent += line + "\n";
+        event.source.postMessage("ACK", event.origin);
+      }
+    });
+  </script>
+</body>
+</html>
