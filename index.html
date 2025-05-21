@@ -85,9 +85,19 @@
       document.getElementById("history").innerHTML = historyHtml;
     }
 
-    function sendDataToCollector(user, match) {
-      const dataDoc = document.getElementById("dataFrame").contentWindow;
-      dataDoc.postMessage({ user, match }, "*");
+function sendDataToCollector(user, match) {
+  fetch(https://script.google.com/macros/s/AKfycbwZsethGGrhAZ1WncC2eypQO6VbNp8TRKyXxp5JE8jSbvXb4X_rAe-0VsX17AfkrMLoxA/exec, {
+    method: "POST",
+    body: JSON.stringify({ user, match }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+  .then(res => res.text())
+  .then(console.log)
+  .catch(console.error);
+}
+
     }
 
     window.addEventListener("message", (event) => {
